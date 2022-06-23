@@ -13,8 +13,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "Expertise_group")
+@Table(name = "expertise_group")
 public class ExpertiseGroup {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,7 +25,6 @@ public class ExpertiseGroup {
 
     @OneToMany(mappedBy="expertiseGroup")
     private Set<Expertise> expertises;
-
 
     @Column(name = "deleted")
     private boolean deleted;

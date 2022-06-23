@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet logicalFilePath="2022-23-06--create-table-expertise"
+               id="2022-23-06--create-table-expertise" author="s.mitskevich">
+        <createTable tableName="expertise">
+            <column name="id" type="serial">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="deleted" type="boolean"/>
+            <column name="expertise_group_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="expertise"
+                                 baseColumnNames="expertise_group_id"
+                                 constraintName="FK_expertise_expertise_group"
+                                 referencedTableName="expertise_group"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

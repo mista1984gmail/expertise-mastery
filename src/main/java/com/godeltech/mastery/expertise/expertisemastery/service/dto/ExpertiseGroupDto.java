@@ -22,7 +22,5 @@ public class ExpertiseGroupDto {
     @NotBlank
     private String name;
 
-    private Set<Expertise> expertises;
-
     private boolean deleted;
 }

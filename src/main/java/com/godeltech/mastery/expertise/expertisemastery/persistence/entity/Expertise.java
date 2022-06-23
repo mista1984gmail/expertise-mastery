@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 
@@ -22,12 +24,14 @@ public class Expertise {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name="expertise_group_id", nullable=false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="expertise_group_id")
+    @Fetch(FetchMode.JOIN)
     private ExpertiseGroup expertiseGroup;
 
 
     @Column(name = "deleted")
     private boolean deleted;
+
 }
 

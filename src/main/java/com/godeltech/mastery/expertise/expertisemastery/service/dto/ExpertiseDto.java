@@ -21,7 +21,6 @@ public class ExpertiseDto {
     @NotBlank
     private String name;
 
-    @Null
     private ExpertiseGroup expertiseGroup;
 
     private boolean deleted;

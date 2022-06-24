@@ -5,6 +5,7 @@ import com.godeltech.mastery.expertise.expertisemastery.service.dto.ExpertiseDto
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,25 +22,24 @@ public class ExpertiseController {
 
     private final ExpertiseService expertiseService;
 
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ExpertiseDto create(@Valid @NotNull @RequestBody ExpertiseDto expertiseDto) {
+        log.info("Save expertise " + expertiseDto);
+        return expertiseService.saveNewExpertise(expertiseDto);
+    }
+
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<ExpertiseDto> findAll() {
-        log.info("Find all expertise");
-        return expertiseService.findAllExpertise();
+    public ResponseEntity<List<ExpertiseDto>> getAll() {
+        return ResponseEntity.ok(expertiseService.findAllExpertise());
     }
 
     @GetMapping("/{expertiseId}")
     @ResponseStatus(HttpStatus.OK)
-    public ExpertiseDto getExpertiseById(@NotNull @PathVariable Long expertiseId){
+    public ExpertiseDto getById(@NotNull @PathVariable Long expertiseId){
         log.info("Find expertise with id: " + expertiseId);
         return expertiseService.findById(expertiseId);
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ExpertiseDto saveNewExpertise(@Valid @NotNull @RequestBody ExpertiseDto expertiseDto){
-        log.info("Save expertise " + expertiseDto);
-        return expertiseService.saveNewExpertise(expertiseDto);
     }
 
     @DeleteMapping("/{expertiseId}")
@@ -48,15 +48,11 @@ public class ExpertiseController {
         log.info("Delete expertise with id: " + expertiseId);
         expertiseService.deleteExpertise(expertiseId);
     }
-
     @PutMapping("/{expertiseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateExpertise(@NotNull @PathVariable("expertiseId") Long expertiseId, @Valid @NotNull @RequestBody ExpertiseDto expertiseDto){
+    public void update(@NotNull @PathVariable("expertiseId") Long expertiseId, @Valid @NotNull @RequestBody ExpertiseDto expertiseDto){
         log.info("Update expertise with id: " + expertiseId);
         expertiseService.updateExpertise(expertiseId, expertiseDto);
     }
-
-
-
 
 }

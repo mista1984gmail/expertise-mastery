@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -23,4 +24,6 @@ public class ExpertiseGroupDto {
     private String name;
 
     private boolean deleted;
+
+    private Set<Expertise> expertise = new HashSet<>();
 }

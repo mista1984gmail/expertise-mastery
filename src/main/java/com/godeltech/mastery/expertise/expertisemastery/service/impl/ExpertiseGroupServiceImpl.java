@@ -1,11 +1,10 @@
 package com.godeltech.mastery.expertise.expertisemastery.service.impl;
 
 import com.godeltech.mastery.expertise.expertisemastery.exception.EntityNotFoundException;
-import com.godeltech.mastery.expertise.expertisemastery.persistence.entity.Expertise;
 import com.godeltech.mastery.expertise.expertisemastery.persistence.entity.ExpertiseGroup;
 import com.godeltech.mastery.expertise.expertisemastery.persistence.repository.ExpertiseGroupRepository;
+import com.godeltech.mastery.expertise.expertisemastery.persistence.repository.ExpertiseRepository;
 import com.godeltech.mastery.expertise.expertisemastery.service.ExpertiseGroupService;
-import com.godeltech.mastery.expertise.expertisemastery.service.dto.ExpertiseDto;
 import com.godeltech.mastery.expertise.expertisemastery.service.dto.ExpertiseGroupDto;
 import com.godeltech.mastery.expertise.expertisemastery.web.mappers.ExpertiseGroupMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +22,7 @@ import java.util.Optional;
 public class ExpertiseGroupServiceImpl implements ExpertiseGroupService {
 
     private final ExpertiseGroupRepository expertiseGroupRepository;
+    private final ExpertiseRepository expertiseRepository;
 
     private final ExpertiseGroupMapper expertiseGroupMapper;
 
@@ -49,15 +49,17 @@ public class ExpertiseGroupServiceImpl implements ExpertiseGroupService {
     public void deleteExpertiseGroup(Long id) {
         ExpertiseGroupDto expertiseGroupDto = getById(id);
         log.debug("Delete expertise group with id: {}", id);
+        expertiseRepository.deleteByExpertiseGroupId(id);
         expertiseGroupRepository.delete(expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(expertiseGroupDto));
+
     }
     @Transactional
     @Override
     public ExpertiseGroupDto updateExpertiseGroup(Long id,ExpertiseGroupDto expertiseGroupDto) {
         ExpertiseGroup expertiseGroupFromDb = expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(getById(id));
-        expertiseGroupMapper.updateEntityToModel(expertiseGroupFromDb, expertiseGroupDto);
+        expertiseGroupDto.setId(expertiseGroupFromDb.getId());
         log.debug("Update expertise: {}", expertiseGroupDto);
-        return expertiseGroupMapper.expertiseGroupToExpertiseGroupDto(expertiseGroupRepository.save(expertiseGroupFromDb));
+        return expertiseGroupMapper.expertiseGroupToExpertiseGroupDto(expertiseGroupRepository.save(expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(expertiseGroupDto)));
     }
 
     public ExpertiseGroupDto getById(Long id) {

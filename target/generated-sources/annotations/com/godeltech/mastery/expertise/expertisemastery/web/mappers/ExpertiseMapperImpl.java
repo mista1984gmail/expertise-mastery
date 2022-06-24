@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-06-23T06:01:06-0700",
+    date = "2022-06-24T04:51:59-0700",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -37,14 +37,14 @@ public class ExpertiseMapperImpl implements ExpertiseMapper {
             return null;
         }
 
-        Expertise.ExpertiseBuilder expertise = Expertise.builder();
+        Expertise expertise = new Expertise();
 
-        expertise.id( expertiseDto.getId() );
-        expertise.name( expertiseDto.getName() );
-        expertise.expertiseGroup( expertiseDto.getExpertiseGroup() );
-        expertise.deleted( expertiseDto.isDeleted() );
+        expertise.setId( expertiseDto.getId() );
+        expertise.setName( expertiseDto.getName() );
+        expertise.setExpertiseGroup( expertiseDto.getExpertiseGroup() );
+        expertise.setDeleted( expertiseDto.isDeleted() );
 
-        return expertise.build();
+        return expertise;
     }
 
     @Override

@@ -1,16 +1,15 @@
 package com.godeltech.mastery.expertise.expertisemastery.persistence.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 
-@Data
-@Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -27,6 +26,7 @@ public class Expertise {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="expertise_group_id")
     @Fetch(FetchMode.JOIN)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private ExpertiseGroup expertiseGroup;
 
 

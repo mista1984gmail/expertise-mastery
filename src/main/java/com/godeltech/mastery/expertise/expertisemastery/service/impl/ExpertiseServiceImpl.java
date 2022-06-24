@@ -1,10 +1,15 @@
 package com.godeltech.mastery.expertise.expertisemastery.service.impl;
 
+
 import com.godeltech.mastery.expertise.expertisemastery.exception.EntityNotFoundException;
 import com.godeltech.mastery.expertise.expertisemastery.persistence.entity.Expertise;
+import com.godeltech.mastery.expertise.expertisemastery.persistence.entity.ExpertiseGroup;
 import com.godeltech.mastery.expertise.expertisemastery.persistence.repository.ExpertiseRepository;
+import com.godeltech.mastery.expertise.expertisemastery.service.ExpertiseGroupService;
 import com.godeltech.mastery.expertise.expertisemastery.service.ExpertiseService;
 import com.godeltech.mastery.expertise.expertisemastery.service.dto.ExpertiseDto;
+import com.godeltech.mastery.expertise.expertisemastery.service.dto.ExpertiseGroupDto;
+import com.godeltech.mastery.expertise.expertisemastery.web.mappers.ExpertiseGroupMapper;
 import com.godeltech.mastery.expertise.expertisemastery.web.mappers.ExpertiseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +26,9 @@ import java.util.Optional;
 public class ExpertiseServiceImpl implements ExpertiseService {
 
     private final ExpertiseRepository expertiseRepository;
+    private final ExpertiseGroupService expertiseGroupService;
 
+    private final ExpertiseGroupMapper expertiseGroupMapper;
     private final ExpertiseMapper expertiseMapper;
 
 
@@ -33,8 +40,13 @@ public class ExpertiseServiceImpl implements ExpertiseService {
     @Transactional
     @Override
     public ExpertiseDto saveNewExpertise(ExpertiseDto expertiseDto) {
-        log.debug("Save expertise with id: {}", expertiseDto);
-        return expertiseMapper.expertiseToExpertiseDto(expertiseRepository.save(expertiseMapper.expertiseDtoToExpertise(expertiseDto)));
+
+        ExpertiseGroupDto optionalExpertiseGroup= expertiseGroupService.findById(expertiseDto.getExpertiseGroup().getId());
+        expertiseDto.setExpertiseGroup(expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(optionalExpertiseGroup));
+        Expertise savedExpertise = expertiseRepository.save(expertiseMapper.expertiseDtoToExpertise(expertiseDto));
+
+        log.debug("Save expertise: {}", expertiseDto);
+        return expertiseMapper.expertiseToExpertiseDto(savedExpertise);
     }
 
     @Override
@@ -54,10 +66,12 @@ public class ExpertiseServiceImpl implements ExpertiseService {
     @Override
     @Transactional
     public ExpertiseDto updateExpertise(Long id,ExpertiseDto expertiseDto) {
+        ExpertiseGroup expertiseGroupFromDb = expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(expertiseGroupService.findById(expertiseDto.getExpertiseGroup().getId()));
         Expertise expertiseFromDb = expertiseMapper.expertiseDtoToExpertise(getById(id));
-        expertiseMapper.updateEntityToModel(expertiseFromDb, expertiseDto);
+        expertiseDto.setExpertiseGroup(expertiseGroupFromDb);
+        expertiseDto.setId(expertiseFromDb.getId());
         log.debug("Update expertise: {}", expertiseDto);
-        return expertiseMapper.expertiseToExpertiseDto(expertiseRepository.save(expertiseFromDb));
+        return expertiseMapper.expertiseToExpertiseDto(expertiseRepository.save(expertiseMapper.expertiseDtoToExpertise(expertiseDto)));
     }
 
     public ExpertiseDto getById(Long id) {

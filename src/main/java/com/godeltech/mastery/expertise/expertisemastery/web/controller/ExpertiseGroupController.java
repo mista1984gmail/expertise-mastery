@@ -39,7 +39,7 @@ public class ExpertiseGroupController {
 
     @GetMapping("/sorted")
     @ResponseStatus(HttpStatus.OK)
-    public List<ExpertiseGroupDto> sortedExpertiseInGroup(@QueryParam("condition") String condition) {
+    public List<ExpertiseGroupDto> sortedExpertiseInGroup(@QueryParam("condition") @NotNull String condition) {
         log.info("Sorted expertise in expertise group");
         return expertiseGroupService.sortedExpertiseInGroup(condition);
     }

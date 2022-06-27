@@ -28,12 +28,12 @@ public class ExpertiseGroup {
 
     @OneToMany(mappedBy = "expertiseGroup", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     @JsonIgnore
-    private List<Expertise> expertise = new ArrayList<>();
+    private List<Expertise> expertises = new ArrayList<>();
 
-    public void setExpertise(final List<Expertise> expertise) {
-        this.expertise = expertise;
+    public void setExpertise(final List<Expertise> expertises) {
+        this.expertises = expertises;
 
-        for(Expertise e : expertise) {
+        for(Expertise e : expertises) {
             e.setExpertiseGroup(this);
         }
     }

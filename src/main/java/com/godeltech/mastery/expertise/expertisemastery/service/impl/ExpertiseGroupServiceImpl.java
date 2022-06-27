@@ -1,5 +1,6 @@
 package com.godeltech.mastery.expertise.expertisemastery.service.impl;
 
+import com.godeltech.mastery.expertise.expertisemastery.exception.ConditionForSortedNotFoundException;
 import com.godeltech.mastery.expertise.expertisemastery.exception.EntityNotFoundException;
 import com.godeltech.mastery.expertise.expertisemastery.persistence.entity.Expertise;
 import com.godeltech.mastery.expertise.expertisemastery.persistence.entity.ExpertiseGroup;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.function.Consumer;
 
 @Slf4j
 @Service
@@ -26,7 +27,6 @@ public class ExpertiseGroupServiceImpl implements ExpertiseGroupService {
 
     private final ExpertiseGroupRepository expertiseGroupRepository;
     private final ExpertiseRepository expertiseRepository;
-
     private final ExpertiseGroupMapper expertiseGroupMapper;
     private final ExpertiseMapper expertiseMapper;
 
@@ -36,6 +36,7 @@ public class ExpertiseGroupServiceImpl implements ExpertiseGroupService {
         log.debug("Find all expertise groups");
         return expertiseGroupMapper.toListDto(expertiseGroupRepository.findAll());
     }
+
     @Transactional
     @Override
     public ExpertiseGroupDto saveNewExpertiseGroup(ExpertiseGroupDto expertiseGroupDto) {
@@ -48,6 +49,7 @@ public class ExpertiseGroupServiceImpl implements ExpertiseGroupService {
         log.debug("Find expertise group with id: {}", id);
         return Optional.of(getById(id)).get();
     }
+
     @Transactional
     @Override
     public void deleteExpertiseGroup(Long id) {
@@ -57,9 +59,10 @@ public class ExpertiseGroupServiceImpl implements ExpertiseGroupService {
         expertiseGroupRepository.delete(expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(expertiseGroupDto));
 
     }
+
     @Transactional
     @Override
-    public ExpertiseGroupDto updateExpertiseGroup(Long id,ExpertiseGroupDto expertiseGroupDto) {
+    public ExpertiseGroupDto updateExpertiseGroup(Long id, ExpertiseGroupDto expertiseGroupDto) {
         ExpertiseGroup expertiseGroupFromDb = expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(getById(id));
         expertiseGroupDto.setId(expertiseGroupFromDb.getId());
         log.debug("Update expertise: {}", expertiseGroupDto);
@@ -69,35 +72,27 @@ public class ExpertiseGroupServiceImpl implements ExpertiseGroupService {
     @Override
     public List<ExpertiseDto> sortedExpertiseByNameASC(Long id) {
         ExpertiseGroup expertiseGroupFromDb = expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(getById(id));
-        return expertiseMapper.toListDto(expertiseGroupFromDb.getExpertise().stream().sorted((o1, o2) -> o1.getName().compareTo(o2.getName())).collect(Collectors.toList()));
+        return expertiseMapper.toListDto(expertiseGroupFromDb.getExpertises().stream().sorted(Comparator.comparing(Expertise::getName)).toList());
     }
 
     @Override
     public List<ExpertiseGroupDto> sortedExpertiseInGroup(String condition) {
         log.debug("Find all expertise groups");
-        List<ExpertiseGroupDto> expertiseGroups = expertiseGroupMapper.toListDto(expertiseGroupRepository.findAll());
-        if(condition.equals("sortedByNameASC")){
-            log.debug("Sorted expertise in group by name ASC");
-            for (ExpertiseGroupDto el: expertiseGroups ) {
 
-                List<Expertise> list = el.getExpertise().stream().sorted((o1, o2) -> o1.getName().compareTo(o2.getName())).collect(Collectors.toList());
-                el.setExpertise(list);
-            }
-        }
-        else if(condition.equals("sortedByIdASC")){
-            log.debug("Sorted expertise in group by id ASC");
-        for (ExpertiseGroupDto el: expertiseGroups ) {
-            List<Expertise> list = el.getExpertise().stream().sorted(Comparator.comparingLong(Expertise::getId)).collect(Collectors.toList());
-            el.setExpertise(list);
-            }
-        }
-        else if(condition.equals("sortedByNameDESC")) {
-            log.debug("Sorted expertise in group by name DESC");
-            for (ExpertiseGroupDto el : expertiseGroups) {
-                List<Expertise> list = el.getExpertise().stream().sorted(Collections.reverseOrder((o1, o2) -> o1.getName().compareTo(o2.getName()))).collect(Collectors.toList());
-                el.setExpertise(list);
-            }
-        }
+        List<ExpertiseGroupDto> expertiseGroups = expertiseGroupMapper.toListDto(expertiseGroupRepository.findAll());
+        Map<String, Consumer<List<ExpertiseGroupDto>>> consumerMap = new HashMap<>();
+        consumerMap.put("sortedByNameASC", expertiseGroupDtoList -> {
+            expertiseGroupDtoList.forEach(expertiseGroupDto -> expertiseGroupDto.getExpertises().sort(Comparator.comparing(Expertise::getName)));
+        });
+        consumerMap.put("sortedByIdASC", expertiseGroupDtoList -> {
+            expertiseGroupDtoList.forEach(expertiseGroupDto -> expertiseGroupDto.getExpertises().sort(Comparator.comparing(Expertise::getId)));
+        });
+        consumerMap.put("sortedByNameDESC", expertiseGroupDtoList -> {
+            expertiseGroupDtoList.forEach(expertiseGroupDto -> expertiseGroupDto.getExpertises().sort(Comparator.comparing(Expertise::getName).reversed()));
+        });
+        if (consumerMap.get(condition) != null) {
+            consumerMap.get(condition).accept(expertiseGroups);
+        } else throw new ConditionForSortedNotFoundException("Condition for sorted  expertise not found ");
         return expertiseGroups;
     }
 

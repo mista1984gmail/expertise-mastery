@@ -25,5 +25,5 @@ public class ExpertiseGroupDto {
 
     private boolean deleted;
 
-    private List<Expertise> expertise = new ArrayList<>();
+    private List<Expertise> expertises = new ArrayList<>();
 }

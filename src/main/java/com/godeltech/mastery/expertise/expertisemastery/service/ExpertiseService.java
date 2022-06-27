@@ -13,10 +13,8 @@ public interface ExpertiseService {
 
     ExpertiseDto findById(Long id);
 
-    void deleteExpertise (Long id);
+    void deleteExpertise(Long id);
 
     ExpertiseDto updateExpertise(Long id, ExpertiseDto expertiseDto);
-
-
 
 }

@@ -3,10 +3,11 @@ package com.godeltech.mastery.expertise.expertisemastery.persistence.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Getter
 @Setter
@@ -14,6 +15,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "expertise")
+@SQLDelete(sql = "UPDATE expertise SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 public class Expertise {
 
     @Id

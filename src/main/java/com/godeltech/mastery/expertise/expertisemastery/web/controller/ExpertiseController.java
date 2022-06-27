@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @Slf4j
@@ -48,6 +49,7 @@ public class ExpertiseController {
         log.info("Delete expertise with id: " + expertiseId);
         expertiseService.deleteExpertise(expertiseId);
     }
+
     @PutMapping("/{expertiseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@NotNull @PathVariable("expertiseId") Long expertiseId, @Valid @NotNull @RequestBody ExpertiseDto expertiseDto){

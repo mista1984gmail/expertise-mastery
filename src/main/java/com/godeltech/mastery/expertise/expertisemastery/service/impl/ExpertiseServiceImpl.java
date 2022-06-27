@@ -31,7 +31,6 @@ public class ExpertiseServiceImpl implements ExpertiseService {
     private final ExpertiseGroupMapper expertiseGroupMapper;
     private final ExpertiseMapper expertiseMapper;
 
-
     @Override
     public List<ExpertiseDto> findAllExpertise() {
         log.debug("Find all expertises");

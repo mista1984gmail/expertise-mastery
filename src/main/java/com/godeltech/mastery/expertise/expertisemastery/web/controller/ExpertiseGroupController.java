@@ -1,6 +1,7 @@
 package com.godeltech.mastery.expertise.expertisemastery.web.controller;
 
 import com.godeltech.mastery.expertise.expertisemastery.service.ExpertiseGroupService;
+import com.godeltech.mastery.expertise.expertisemastery.service.dto.ExpertiseDto;
 import com.godeltech.mastery.expertise.expertisemastery.service.dto.ExpertiseGroupDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @Slf4j
@@ -26,6 +28,20 @@ public class ExpertiseGroupController {
     public List<ExpertiseGroupDto> findAll() {
         log.info("Find all expertise");
         return expertiseGroupService.findAllExpertiseGroup();
+    }
+
+    @GetMapping("/sorted/{expertiseGroupId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ExpertiseDto> sortedExpertiseByNameASC(@NotNull @PathVariable Long expertiseGroupId) {
+        log.info("Sorted expertise by name ASC");
+        return expertiseGroupService.sortedExpertiseByNameASC(expertiseGroupId);
+    }
+
+    @GetMapping("/sorted")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ExpertiseGroupDto> sortedExpertiseInGroup(@QueryParam("condition") String condition) {
+        log.info("Sorted expertise in expertise group");
+        return expertiseGroupService.sortedExpertiseInGroup(condition);
     }
 
     @GetMapping("/{expertiseGroupId}")

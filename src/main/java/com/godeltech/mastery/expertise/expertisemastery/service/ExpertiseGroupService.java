@@ -16,4 +16,8 @@ public interface ExpertiseGroupService {
     void deleteExpertiseGroup (Long id);
 
     ExpertiseGroupDto updateExpertiseGroup(Long id, ExpertiseGroupDto expertiseGroupDto);
+
+    List<ExpertiseDto> sortedExpertiseByNameASC(Long id);
+
+    List<ExpertiseGroupDto> sortedExpertiseInGroup(String condition);
 }

@@ -2,13 +2,12 @@ package com.godeltech.mastery.expertise.expertisemastery.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -29,9 +28,9 @@ public class ExpertiseGroup {
 
     @OneToMany(mappedBy = "expertiseGroup", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     @JsonIgnore
-    private Set<Expertise> expertise = new HashSet<>();
+    private List<Expertise> expertise = new ArrayList<>();
 
-    public void setExpertise(final Set<Expertise> expertise) {
+    public void setExpertise(final List<Expertise> expertise) {
         this.expertise = expertise;
 
         for(Expertise e : expertise) {

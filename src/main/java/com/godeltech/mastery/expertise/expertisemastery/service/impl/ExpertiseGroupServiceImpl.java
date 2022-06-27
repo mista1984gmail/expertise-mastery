@@ -55,7 +55,7 @@ public class ExpertiseGroupServiceImpl implements ExpertiseGroupService {
     public void deleteExpertiseGroup(Long id) {
         ExpertiseGroupDto expertiseGroupDto = getById(id);
         log.debug("Delete expertise group with id: {}", id);
-        expertiseRepository.deleteByExpertiseGroupId(id);
+        expertiseRepository.softDeleteByExpertiseGroupId(id);
         expertiseGroupRepository.delete(expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(expertiseGroupDto));
 
     }

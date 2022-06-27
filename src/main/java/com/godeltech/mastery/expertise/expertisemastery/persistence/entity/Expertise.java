@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 @Getter
 @Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -31,7 +32,6 @@ public class Expertise {
     @Fetch(FetchMode.JOIN)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private ExpertiseGroup expertiseGroup;
-
 
     @Column(name = "deleted")
     private boolean deleted;

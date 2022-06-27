@@ -10,4 +10,8 @@ public interface ExpertiseRepository extends JpaRepository<Expertise, Long> {
     @Modifying
     @Query("DELETE FROM Expertise e WHERE e.expertiseGroup.id = ?1")
     void deleteByExpertiseGroupId(Long expertiseGroupId);
+
+    @Modifying
+    @Query("UPDATE Expertise e SET e.deleted = true WHERE e.expertiseGroup.id = ?1")
+    void softDeleteByExpertiseGroupId(Long expertiseGroupId);
 }

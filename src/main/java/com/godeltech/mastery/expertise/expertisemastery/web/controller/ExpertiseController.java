@@ -22,7 +22,6 @@ public class ExpertiseController {
 
     private final ExpertiseService expertiseService;
 
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ExpertiseDto create(@Valid @NotNull @RequestBody ExpertiseDto expertiseDto) {

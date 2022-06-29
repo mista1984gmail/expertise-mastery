@@ -32,13 +32,13 @@ public class ExpertiseServiceImpl implements ExpertiseService {
     private final ExpertiseMapper expertiseMapper;
 
     @Override
-    public List<ExpertiseDto> findAllExpertise() {
+    public List<ExpertiseDto> findAll() {
         log.debug("Find all expertises");
         return expertiseMapper.toListDto(expertiseRepository.findAll());
     }
     @Transactional
     @Override
-    public ExpertiseDto saveNewExpertise(ExpertiseDto expertiseDto) {
+    public ExpertiseDto save(ExpertiseDto expertiseDto) {
 
         ExpertiseGroupDto optionalExpertiseGroup= expertiseGroupService.findById(expertiseDto.getExpertiseGroup().getId());
         expertiseDto.setExpertiseGroup(expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(optionalExpertiseGroup));
@@ -56,7 +56,7 @@ public class ExpertiseServiceImpl implements ExpertiseService {
 
     @Override
     @Transactional
-    public void deleteExpertise(Long id) {
+    public void delete(Long id) {
         ExpertiseDto expertiseDto = getById(id);
         log.debug("Delete expertise with id: {}", id);
         expertiseRepository.delete(expertiseMapper.expertiseDtoToExpertise(expertiseDto));
@@ -64,7 +64,7 @@ public class ExpertiseServiceImpl implements ExpertiseService {
 
     @Override
     @Transactional
-    public ExpertiseDto updateExpertise(Long id,ExpertiseDto expertiseDto) {
+    public ExpertiseDto update(Long id, ExpertiseDto expertiseDto) {
         ExpertiseGroup expertiseGroupFromDb = expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(expertiseGroupService.findById(expertiseDto.getExpertiseGroup().getId()));
         Expertise expertiseFromDb = expertiseMapper.expertiseDtoToExpertise(getById(id));
         expertiseDto.setExpertiseGroup(expertiseGroupFromDb);

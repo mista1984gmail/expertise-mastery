@@ -11,14 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @Slf4j
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/expertise")
+@RequestMapping("api/v1/expertises")
 public class ExpertiseController {
 
     private final ExpertiseService expertiseService;
@@ -28,12 +27,12 @@ public class ExpertiseController {
     @ResponseStatus(HttpStatus.CREATED)
     public ExpertiseDto create(@Valid @NotNull @RequestBody ExpertiseDto expertiseDto) {
         log.info("Save expertise " + expertiseDto);
-        return expertiseService.saveNewExpertise(expertiseDto);
+        return expertiseService.save(expertiseDto);
     }
 
     @GetMapping
     public ResponseEntity<List<ExpertiseDto>> getAll() {
-        return ResponseEntity.ok(expertiseService.findAllExpertise());
+        return ResponseEntity.ok(expertiseService.findAll());
     }
 
     @GetMapping("/{expertiseId}")
@@ -47,14 +46,14 @@ public class ExpertiseController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteById(@NotNull @PathVariable Long expertiseId) {
         log.info("Delete expertise with id: " + expertiseId);
-        expertiseService.deleteExpertise(expertiseId);
+        expertiseService.delete(expertiseId);
     }
 
     @PutMapping("/{expertiseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@NotNull @PathVariable("expertiseId") Long expertiseId, @Valid @NotNull @RequestBody ExpertiseDto expertiseDto){
         log.info("Update expertise with id: " + expertiseId);
-        expertiseService.updateExpertise(expertiseId, expertiseDto);
+        expertiseService.update(expertiseId, expertiseDto);
     }
 
 }

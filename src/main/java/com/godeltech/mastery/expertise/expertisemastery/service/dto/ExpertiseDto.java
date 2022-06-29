@@ -12,7 +12,6 @@ import javax.validation.constraints.Null;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class ExpertiseDto {
 
     @Null

@@ -11,7 +11,6 @@ import javax.persistence.Table;
 
 @Getter
 @Setter
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

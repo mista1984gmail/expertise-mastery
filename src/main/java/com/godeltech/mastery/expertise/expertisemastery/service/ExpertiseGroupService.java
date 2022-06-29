@@ -7,17 +7,14 @@ import java.util.List;
 
 public interface ExpertiseGroupService {
 
-    List<ExpertiseGroupDto> findAllExpertiseGroup();
+    List<ExpertiseGroupDto> findAll();
 
-    ExpertiseGroupDto saveNewExpertiseGroup(ExpertiseGroupDto expertiseGroupDto);
+    ExpertiseGroupDto save(ExpertiseGroupDto expertiseGroupDto);
 
     ExpertiseGroupDto findById(Long id);
 
-    void deleteExpertiseGroup (Long id);
+    void delete(Long id);
 
-    ExpertiseGroupDto updateExpertiseGroup(Long id, ExpertiseGroupDto expertiseGroupDto);
+    ExpertiseGroupDto update(Long id, ExpertiseGroupDto expertiseGroupDto);
 
-    List<ExpertiseDto> sortedExpertiseByNameASC(Long id);
-
-    List<ExpertiseGroupDto> sortedExpertiseInGroup(String condition);
 }

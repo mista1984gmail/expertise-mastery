@@ -11,14 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @Slf4j
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/expertise-group")
+@RequestMapping("api/v1/expertise-groups")
 public class ExpertiseGroupController {
 
     private final ExpertiseGroupService expertiseGroupService;
@@ -27,21 +26,7 @@ public class ExpertiseGroupController {
     @ResponseStatus(HttpStatus.OK)
     public List<ExpertiseGroupDto> findAll() {
         log.info("Find all expertise");
-        return expertiseGroupService.findAllExpertiseGroup();
-    }
-
-    @GetMapping("/sorted/{expertiseGroupId}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<ExpertiseDto> sortedExpertiseByNameASC(@NotNull @PathVariable Long expertiseGroupId) {
-        log.info("Sorted expertise by name ASC");
-        return expertiseGroupService.sortedExpertiseByNameASC(expertiseGroupId);
-    }
-
-    @GetMapping("/sorted")
-    @ResponseStatus(HttpStatus.OK)
-    public List<ExpertiseGroupDto> sortedExpertiseInGroup(@QueryParam("condition") @NotNull String condition) {
-        log.info("Sorted expertise in expertise group");
-        return expertiseGroupService.sortedExpertiseInGroup(condition);
+        return expertiseGroupService.findAll();
     }
 
     @GetMapping("/{expertiseGroupId}")
@@ -55,21 +40,21 @@ public class ExpertiseGroupController {
     @ResponseStatus(HttpStatus.CREATED)
     public ExpertiseGroupDto create(@Valid @NotNull @RequestBody ExpertiseGroupDto expertiseGroupDto){
         log.info("Save expertise " + expertiseGroupDto);
-        return expertiseGroupService.saveNewExpertiseGroup(expertiseGroupDto);
+        return expertiseGroupService.save(expertiseGroupDto);
     }
 
     @DeleteMapping("/{expertiseGroupId}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteById(@NotNull @PathVariable Long expertiseGroupId) {
         log.info("Delete expertise group with id: " + expertiseGroupId);
-        expertiseGroupService.deleteExpertiseGroup(expertiseGroupId);
+        expertiseGroupService.delete(expertiseGroupId);
     }
 
     @PutMapping("/{expertiseGroupId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@NotNull @PathVariable("expertiseGroupId") Long expertiseGroupId, @Valid @NotNull @RequestBody ExpertiseGroupDto expertiseGroupDto){
         log.info("Update expertise group with id: " + expertiseGroupId);
-        expertiseGroupService.updateExpertiseGroup(expertiseGroupId, expertiseGroupDto);
+        expertiseGroupService.update(expertiseGroupId, expertiseGroupDto);
     }
 
 }

@@ -28,18 +28,16 @@ public class ExpertiseGroupServiceImpl implements ExpertiseGroupService {
     private final ExpertiseGroupRepository expertiseGroupRepository;
     private final ExpertiseRepository expertiseRepository;
     private final ExpertiseGroupMapper expertiseGroupMapper;
-    private final ExpertiseMapper expertiseMapper;
-
 
     @Override
-    public List<ExpertiseGroupDto> findAllExpertiseGroup() {
+    public List<ExpertiseGroupDto> findAll() {
         log.debug("Find all expertise groups");
         return expertiseGroupMapper.toListDto(expertiseGroupRepository.findAll());
     }
 
     @Transactional
     @Override
-    public ExpertiseGroupDto saveNewExpertiseGroup(ExpertiseGroupDto expertiseGroupDto) {
+    public ExpertiseGroupDto save(ExpertiseGroupDto expertiseGroupDto) {
         log.debug("Save expertise group with id: {}", expertiseGroupDto);
         return expertiseGroupMapper.expertiseGroupToExpertiseGroupDto(expertiseGroupRepository.save(expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(expertiseGroupDto)));
     }
@@ -52,7 +50,7 @@ public class ExpertiseGroupServiceImpl implements ExpertiseGroupService {
 
     @Transactional
     @Override
-    public void deleteExpertiseGroup(Long id) {
+    public void delete(Long id) {
         ExpertiseGroupDto expertiseGroupDto = getById(id);
         log.debug("Delete expertise group with id: {}", id);
         expertiseRepository.softDeleteByExpertiseGroupId(id);
@@ -62,40 +60,12 @@ public class ExpertiseGroupServiceImpl implements ExpertiseGroupService {
 
     @Transactional
     @Override
-    public ExpertiseGroupDto updateExpertiseGroup(Long id, ExpertiseGroupDto expertiseGroupDto) {
+    public ExpertiseGroupDto update(Long id, ExpertiseGroupDto expertiseGroupDto) {
         ExpertiseGroup expertiseGroupFromDb = expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(getById(id));
         expertiseGroupDto.setId(expertiseGroupFromDb.getId());
         log.debug("Update expertise: {}", expertiseGroupDto);
         return expertiseGroupMapper.expertiseGroupToExpertiseGroupDto(expertiseGroupRepository.save(expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(expertiseGroupDto)));
     }
-
-    @Override
-    public List<ExpertiseDto> sortedExpertiseByNameASC(Long id) {
-        ExpertiseGroup expertiseGroupFromDb = expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(getById(id));
-        return expertiseMapper.toListDto(expertiseGroupFromDb.getExpertises().stream().sorted(Comparator.comparing(Expertise::getName)).toList());
-    }
-
-    @Override
-    public List<ExpertiseGroupDto> sortedExpertiseInGroup(String condition) {
-        log.debug("Find all expertise groups");
-
-        List<ExpertiseGroupDto> expertiseGroups = expertiseGroupMapper.toListDto(expertiseGroupRepository.findAll());
-        Map<String, Consumer<List<ExpertiseGroupDto>>> consumerMap = new HashMap<>();
-        consumerMap.put("sortedByNameASC", expertiseGroupDtoList -> {
-            expertiseGroupDtoList.forEach(expertiseGroupDto -> expertiseGroupDto.getExpertises().sort(Comparator.comparing(Expertise::getName)));
-        });
-        consumerMap.put("sortedByIdASC", expertiseGroupDtoList -> {
-            expertiseGroupDtoList.forEach(expertiseGroupDto -> expertiseGroupDto.getExpertises().sort(Comparator.comparing(Expertise::getId)));
-        });
-        consumerMap.put("sortedByNameDESC", expertiseGroupDtoList -> {
-            expertiseGroupDtoList.forEach(expertiseGroupDto -> expertiseGroupDto.getExpertises().sort(Comparator.comparing(Expertise::getName).reversed()));
-        });
-        if (consumerMap.get(condition) != null) {
-            consumerMap.get(condition).accept(expertiseGroups);
-        } else throw new ConditionForSortedNotFoundException("Condition for sorted  expertise not found ");
-        return expertiseGroups;
-    }
-
     public ExpertiseGroupDto getById(Long id) {
         return expertiseGroupMapper.expertiseGroupToExpertiseGroupDto(expertiseGroupRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Expertise group with id: " + id + " not found")));

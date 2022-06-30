@@ -7,6 +7,7 @@ import org.hibernate.annotations.*;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Getter
@@ -16,6 +17,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "expertise")
 @SQLDelete(sql = "UPDATE expertise SET deleted = true WHERE id=?")
+@Loader(namedQuery = "findExpertiseById")
+@NamedQuery(name = "findExpertiseById", query =
+        "SELECT e " +
+                "from Expertise e " +
+                "WHERE " +
+                "  e.id = ?1 AND " +
+                "  e.deleted = false")
 @Where(clause = "deleted=false")
 public class Expertise {
 

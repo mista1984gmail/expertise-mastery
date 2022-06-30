@@ -1,23 +1,18 @@
 package com.godeltech.mastery.expertise.expertisemastery.service.impl;
 
-import com.godeltech.mastery.expertise.expertisemastery.exception.ConditionForSortedNotFoundException;
 import com.godeltech.mastery.expertise.expertisemastery.exception.EntityNotFoundException;
-import com.godeltech.mastery.expertise.expertisemastery.persistence.entity.Expertise;
 import com.godeltech.mastery.expertise.expertisemastery.persistence.entity.ExpertiseGroup;
 import com.godeltech.mastery.expertise.expertisemastery.persistence.repository.ExpertiseGroupRepository;
-import com.godeltech.mastery.expertise.expertisemastery.persistence.repository.ExpertiseRepository;
 import com.godeltech.mastery.expertise.expertisemastery.service.ExpertiseGroupService;
-import com.godeltech.mastery.expertise.expertisemastery.service.dto.ExpertiseDto;
 import com.godeltech.mastery.expertise.expertisemastery.service.dto.ExpertiseGroupDto;
 import com.godeltech.mastery.expertise.expertisemastery.web.mappers.ExpertiseGroupMapper;
-import com.godeltech.mastery.expertise.expertisemastery.web.mappers.ExpertiseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -26,7 +21,6 @@ import java.util.function.Consumer;
 public class ExpertiseGroupServiceImpl implements ExpertiseGroupService {
 
     private final ExpertiseGroupRepository expertiseGroupRepository;
-    private final ExpertiseRepository expertiseRepository;
     private final ExpertiseGroupMapper expertiseGroupMapper;
 
     @Override
@@ -53,9 +47,7 @@ public class ExpertiseGroupServiceImpl implements ExpertiseGroupService {
     public void delete(Long id) {
         ExpertiseGroupDto expertiseGroupDto = getById(id);
         log.debug("Delete expertise group with id: {}", id);
-        expertiseRepository.softDeleteByExpertiseGroupId(id);
         expertiseGroupRepository.delete(expertiseGroupMapper.expertiseGroupDtoToExpertiseGroup(expertiseGroupDto));
-
     }
 
     @Transactional

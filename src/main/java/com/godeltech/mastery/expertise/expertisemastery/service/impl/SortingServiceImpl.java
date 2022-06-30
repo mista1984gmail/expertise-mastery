@@ -32,20 +32,22 @@ public class SortingServiceImpl implements SortingService {
     @Override
     public SortingExpertises sortedExpertiseInGroup(String condition) {
         SortingExpertises sortingExpertises = new SortingExpertises();
+        log.debug("Sorted expertise groups by condition: {}", condition);
+        sortingExpertises.setSortingExpertise(init().entrySet().stream()
+                .peek(x->x.getValue().sort(sortingExpertiseInGroups(condition)))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,(e1,e2)->e1,HashMap::new)));
+        return sortingExpertises;
+    }
+
+    public Map<String, List<ExpertiseResponse>> init(){
         Map<String, List<ExpertiseResponse>> sortingExpertise = new HashMap<>();
         log.debug("Find all expertise groups");
         List<ExpertiseGroupDto> expertiseGroups = expertiseGroupMapper.toListDto(expertiseGroupRepository.findAll());
-        for (ExpertiseGroupDto el:expertiseGroups) {
+        for (ExpertiseGroupDto el : expertiseGroups) {
             sortingExpertise.put(el.getName(), expertiseMapper.toListResponse(expertiseMapper.toListDto(el.getExpertises())));
         }
-        log.debug("Sorted expertise groups by condition: {}", condition);
-        Map<String, List<ExpertiseResponse>> stringListMap = sortingExpertise.entrySet().stream()
-                .peek(x->x.getValue().sort(sortingExpertiseInGroups(condition)))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,(e1,e2)->e1,HashMap::new));
-        sortingExpertises.setSortingExpertise(sortingExpertise);
-
-        return sortingExpertises;
-
+        return sortingExpertise;
     }
+
 }
 

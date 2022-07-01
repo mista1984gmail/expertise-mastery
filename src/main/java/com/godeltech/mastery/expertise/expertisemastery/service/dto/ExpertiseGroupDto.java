@@ -2,7 +2,6 @@ package com.godeltech.mastery.expertise.expertisemastery.service.dto;
 
 import com.godeltech.mastery.expertise.expertisemastery.persistence.entity.Expertise;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

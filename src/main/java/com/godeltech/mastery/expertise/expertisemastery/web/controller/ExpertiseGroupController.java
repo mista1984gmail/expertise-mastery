@@ -1,7 +1,6 @@
 package com.godeltech.mastery.expertise.expertisemastery.web.controller;
 
 import com.godeltech.mastery.expertise.expertisemastery.service.ExpertiseGroupService;
-import com.godeltech.mastery.expertise.expertisemastery.service.dto.ExpertiseDto;
 import com.godeltech.mastery.expertise.expertisemastery.service.dto.ExpertiseGroupDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

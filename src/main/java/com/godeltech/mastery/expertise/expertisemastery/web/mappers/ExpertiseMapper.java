@@ -22,7 +22,10 @@ public interface ExpertiseMapper {
     @Mapping(source = "expertiseDto.id", target = "id")
     ExpertiseResponse dtoToResponse(ExpertiseDto expertiseDto);
 
+    List<ExpertiseResponse> dtoListToListResponse(
+            List<ExpertiseDto> expertiseDtos);
+
     List<ExpertiseResponse> toListResponse(
-            List<ExpertiseDto> ExpertiseDtos);
+            List<Expertise> expertises);
 
 }

@@ -1,7 +1,7 @@
 package com.godeltech.mastery.expertise.expertisemastery.web.controller;
 
 import com.godeltech.mastery.expertise.expertisemastery.service.SortingService;
-import com.godeltech.mastery.expertise.expertisemastery.service.sorting.ConditionForSortingExpertise;
+import com.godeltech.mastery.expertise.expertisemastery.service.sorting.ExpertiseSortType;
 import com.godeltech.mastery.expertise.expertisemastery.web.dto.response.ExpertiseResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class SortingController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Map<String, List<ExpertiseResponse>> sortedExpertiseInGroup(@RequestParam ("condition") @NotNull ConditionForSortingExpertise condition) {
+    public Map<String, List<ExpertiseResponse>> sortedExpertiseInGroup(@RequestParam ("condition") @NotNull ExpertiseSortType condition) {
         log.info("Sorted expertise in expertise group");
         return sortingService.sortedExpertiseInGroup(condition);
     }

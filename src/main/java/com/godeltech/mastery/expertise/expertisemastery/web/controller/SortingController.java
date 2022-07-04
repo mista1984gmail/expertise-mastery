@@ -1,6 +1,6 @@
 package com.godeltech.mastery.expertise.expertisemastery.web.controller;
 
-import com.godeltech.mastery.expertise.expertisemastery.service.SortingService;
+import com.godeltech.mastery.expertise.expertisemastery.service.ExpertiseSortingService;
 import com.godeltech.mastery.expertise.expertisemastery.service.sorting.ExpertiseSortType;
 import com.godeltech.mastery.expertise.expertisemastery.web.dto.response.ExpertiseResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.Map;
 @RequestMapping("api/v1/sorting-expertise-groups")
 public class SortingController {
 
-    private final SortingService sortingService;
+    private final ExpertiseSortingService sortingService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

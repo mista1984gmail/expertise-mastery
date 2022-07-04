@@ -6,7 +6,7 @@ import com.godeltech.mastery.expertise.expertisemastery.web.dto.response.Experti
 import java.util.List;
 import java.util.Map;
 
-public interface SortingService {
+public interface ExpertiseSortingService {
 
     Map<String, List<ExpertiseResponse>> sortedExpertiseInGroup(ExpertiseSortType condition);
 }

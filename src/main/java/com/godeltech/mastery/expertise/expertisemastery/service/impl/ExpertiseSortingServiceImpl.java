@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -27,14 +28,15 @@ public class ExpertiseSortingServiceImpl implements ExpertiseSortingService {
     private final ExpertiseMapper expertiseMapper;
 
     @Override
-    public Map<String, List<ExpertiseResponse>> sortedExpertiseInGroup(ExpertiseSortType condition) {
-        log.debug("Sorted expertise groups by condition: {}", condition);
+    public Map<String, List<ExpertiseResponse>> sortedExpertiseInGroup(ExpertiseSortType expertiseSortType) {
+        log.debug("Sorted expertise groups by condition: {}", expertiseSortType);
         List<ExpertiseGroup> expertiseGroups = expertiseGroupRepository.findAll();
 
         Map<String, List<ExpertiseResponse>> sortedMap = new HashMap<>();
+
         for (ExpertiseGroup eg : expertiseGroups) {
             var sortList = eg.getExpertises().stream()
-                    .sorted(condition.getComparator())
+                    .sorted(expertiseSortType.getComparator())
                     .collect(toList());
             sortedMap.put(eg.getName(), expertiseMapper.toListResponse(sortList));
         }
